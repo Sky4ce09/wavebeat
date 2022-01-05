@@ -1,8 +1,26 @@
 <!DOCTYPE html>
+//i'm still learning how to do frontend
 <html>
-<body>
-<h1>Hello there, bytebeat enthusiast</h1>
-<p>Here's a fancy tool I have made.</p>
-<object type="application/javascript" data="wavebeat.js" width="1280" height="720"></object>
-</body>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+  </head>
+  <body>
+    <canvas class="myCanvas"></canvas>
+    <script>
+      const canvas = document.querySelector('.myCanvas');
+      const width = canvas.width = window.innerWidth;
+      const height = canvas.height = window.innerHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgb(0, 0, 0)';
+      ctx.fillRect(0, 0, width, height);
+    </script>
+  </body>
 </html>
