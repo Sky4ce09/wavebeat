@@ -3,7 +3,6 @@
   <head>
     <style>
     </style>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="in the making">
@@ -11,7 +10,12 @@
     <title>under construction</title>
   </head>
   <body style="background-color: black;">
-    <div id="wavebeat-origin">
+    <div id="editor" style="width: 1280px; height: 300px;">
+      <div id="loop-frame" style="width: 800px;">
+        <input id="loopAdder" type="button" value="Add a new loop">
+      </div>
+      <span id="output" style="width: 480px; overflow-y: scroll;">
+      </span>
     </div>
     <div id="composerdiv">
       <div id="link" style="color: white;">
@@ -19,5 +23,54 @@
       </div>
       <iframe id="bytebeatcomposer" src="https://sarpnt.github.io/bytebeat-composer/#v3b64q1ZKzk9JVbJSMlCqBQA=" width="1280" height="400" alt="oh no"></iframe>
     </div>
+    <script id="prepareElements">
+      document.getElementById("loopAdder").addEventListener("click", addNewLoop());
+    </script>
+    <script id="init" src="init.js"></script>
+    <script id="identifierSetter">
+      var ids = {};
+      function generate(type, name){
+        if(!(ids[name] > -1)){
+          ids[name] = 0;
+        }
+        let out = document.createElement(type);
+        let attr = document.createAttribute("id");
+        attr.value = name + ids[name];
+        out.setAttributeNode(attr);
+        return out;
+        ids[name]++;
+      }
+    </script>
+    <script id="newLoop">
+      function addNewLoop(){
+        //loop1 loop2 funny c: || newtf stands for new text field
+        let newDiv = generate("div", "loop");
+        
+        let newtf = document.createElement("input");
+        let attr = document.createAttribute("type");
+        attr.value = "text";
+        newtf.setAttributeNode(attr);
+        attr = document.createAttribute("value");
+        attr.value = "Loop " + (ids["Loop "]);
+        ids["Loop "]++;
+        newtf.setAttributeNode(attr);
+        newDiv.appendChild(newtf);
+
+        let btn = document.createElement("input");
+        attr = document.createAttribute("targetDiv");
+        attr.value = "newDiv";
+        btn.setAttributeNode(attr);
+        attr = document.createAttribute("type");
+        attr.value = "button";
+        btn.setAttributeNode(attr);
+        btn.addEventListener("click", addWave(newDiv));
+        newDiv.appendChild(btn);
+        attr = document.createAttribute("width");
+        attr.value = "80";
+        let newDivChild = generate("div", "loopsubdiv");
+        newDiv.appendChild(newDivChild);
+        document.getElementById("looplist").appendChild(newDiv);
+      }
+    </script>
   </body>
 </html>
