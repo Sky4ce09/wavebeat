@@ -1,75 +1,82 @@
 <!DOCTYPE html>
 <!--NONE OF THIS WILL EVER BE SHOWN TO IRLS LMAO-->
 <html>
-  <head>
-    <style>
-    </style>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Workplace for interested people">
-    <meta name="keywords" content="bytebeat">
-    <title>Wavebeat Station</title>
-  </head>
-  <body style="background-color: black;">
-    <div id="editor" style="width: 1280px;">
-      <div>
-        <input id="loopAdder" type="button" value="Add a new loop">
-        <input id="sampleRate" type="text" value=8000 size="2" oninput="evaluateHtml()">
-        <span style="color: white">kHz</span>
-        <input id="loopDuration" type="text" value=500 size="2" oninput="evaluateHtml()">
-        <span style="color: white">ms (loop duration in milliseconds)</span>
-        <input id="loopIndex" type="text" value="" size="14" oninput="evaluateHtml()">
-        <span style="color: white">loop indices (as in 0,1,0,0,1 for myLoop0, myLoop1, myLoop0, myLoop0, myLoop1)</span>
-      </div>
-      <div id="loop-frame" style="overflow-x: scroll">
-        <table id="tab">
-          <tbody id="looplistRows">
-            <tr id="looplist">
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div>
-      <h6 style="color: white;">Output:</h6>
-      <textarea readonly id="output" cols="64" rows="8">
+
+<head>
+	<style>
+	</style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Workplace for interested people">
+	<meta name="keywords" content="bytebeat">
+	<title>Wavebeat Station</title>
+</head>
+
+<body style="background-color: black;">
+	<div id="editor" style="width: 1280px;">
+		<div>
+			<input id="loopAdder" type="button" value="Add a new loop">
+			<input id="sampleRate" type="text" value=8000 size="2" oninput="evaluateHtml()">
+			<span style="color: white">kHz</span>
+			<input id="loopDuration" type="text" value=500 size="2" oninput="evaluateHtml()">
+			<span style="color: white">ms (loop duration in milliseconds)</span>
+			<input id="loopIndex" type="text" value="" size="14" oninput="evaluateHtml()">
+			<span style="color: white">loop indices (as in 0,1,0,0,1 for myLoop0, myLoop1, myLoop0, myLoop0,
+				myLoop1)</span>
+		</div>
+		<div id="loop-frame" style="overflow-x: scroll">
+			<table id="tab">
+				<tbody id="looplistRows">
+					<tr id="looplist">
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div>
+		<h6 style="color: white;">Output:</h6>
+		<textarea readonly id="output" cols="64" rows="8">
       </textarea>
-    </div>
-    <div id="composerdiv">
-      <div id="link" style="color: white;">
-        <a href="https://sarpnt.github.io/bytebeat-composer" target="_blank"> <p> SArpnt bytebeat composer </p> </a>
-      </div>
-      <iframe id="bytebeatcomposer" src="https://sarpnt.github.io/bytebeat-composer/#v3b64q1ZKzk9JVbJSMlCqBQA=" width="1280" height="400" alt="oh no"></iframe>
-    </div>
-    <script src="init.js"></script>
-    <script src="siteLogic.js"></script>
-    <div style="color: white">
-      <p>The wave input fields describe:</p>
-      <ol>
-        <li>Waveform</li>
-        <li>Volume</li>
-        <li>Frequency</li>
-        <li>Hold</li>
-      </ol>
-      <br/>
-      <p>Valid waveforms (lowercase):</p>
-      <ul>
-        <li>sawtooth</li>
-        <li>square</li>
-        <li>sine</li>
-        <li>laser</li>
-        <li>halflaser</li>
-        <li>any other value (to represent 'empty')</li>
-      </ul>
-      <br/>
-      <p>Valid waveform effects (lowercase):</p>
-      <ul>
-        <li>note</li>
-        <li>cresc</li>
-        <li>rise</li>
-        <li>fall</li>
-        <li>any other value (to represent 'none')</li>
-      </ul>
-    </div>
-  </body>
+	</div>
+	<div id="composerdiv">
+		<div id="link" style="color: white;">
+			<a href="https://sarpnt.github.io/bytebeat-composer" target="_blank">
+				<p> SArpnt bytebeat composer </p>
+			</a>
+		</div>
+		<iframe id="bytebeatcomposer" src="https://sarpnt.github.io/bytebeat-composer/#v3b64q1ZKzk9JVbJSMlCqBQA="
+			width="1280" height="400" alt="oh no"></iframe>
+	</div>
+	<script src="init.js"></script>
+	<script src="siteLogic.js"></script>
+	<div style="color: white">
+		<p>The wave input fields describe:</p>
+		<ol>
+			<li>Waveform</li>
+			<li>Volume</li>
+			<li>Frequency</li>
+			<li>Hold</li>
+		</ol>
+		<br />
+		<p>Valid waveforms (lowercase):</p>
+		<ul>
+			<li>sawtooth</li>
+			<li>square</li>
+			<li>sine</li>
+			<li>laser</li>
+			<li>halflaser</li>
+			<li>any other value (to represent 'empty')</li>
+		</ul>
+		<br />
+		<p>Valid waveform effects (lowercase):</p>
+		<ul>
+			<li>note</li>
+			<li>cresc</li>
+			<li>rise</li>
+			<li>fall</li>
+			<li>any other value (to represent 'none')</li>
+		</ul>
+	</div>
+</body>
+
 </html>
