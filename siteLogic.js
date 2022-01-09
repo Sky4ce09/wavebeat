@@ -248,6 +248,8 @@ function buildHtml() {
 function evaluateHtml() {
   try {
     if (document.getElementById("loopIndex").value != "") {
+      track.m = document.getElementById("loopDuration").value;
+      track.loopLen = document.getElementById("sampleRate").value * track.m / 1000;
       for (let x = 0; x < track.loops.length; x++) {
         track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
         for (let y = 0; y < track.loops[x].waves.length; y++) {
