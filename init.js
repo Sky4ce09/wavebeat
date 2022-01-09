@@ -6,13 +6,15 @@ class Track {
     this.loops = loopList;
   }
   parse() {
-    let index = JSON.parse("[" + document.getElementById("loopIndex").value + "]");
-    let out = "a=" + this.loopLen + ",\nb=" + this.m/this.loopLen + ",\n["
+    let index = JSON.parse(
+      "[" + document.getElementById("loopIndex").value + "]"
+    );
+    let out = "a=" + this.loopLen + ",\nb=" + this.m / this.loopLen + ",\n[";
     for (let i = 0; i < index.length; i++) {
       out += this.loops[index[i]].parse() + ",\n";
     }
     out = out.substring(0, out.length - 2);
-    out += "][floor(t/a)%" + index.length + "]"
+    out += "][floor(t/a)%" + index.length + "]";
     return out;
   }
 }
@@ -29,7 +31,7 @@ class Loop {
       out += this.waves[i].parse(this.waves.length) + ",\n";
     }
     out = out.substring(0, out.length - 2);
-    out += "][floor(t*" + this.waves.length + "/a%" + this.waves.length + ")]"
+    out += "][floor(t*" + this.waves.length + "/a%" + this.waves.length + ")]";
     return out;
   }
 }
@@ -96,19 +98,21 @@ class Wave {
           ")*(t%a<a/2)";
         break;
     }
-    switch (this.fx) {
-      case "note":
-        out += "*(1-(t*" + alen + "%a)/a)";
-        break;
-      case "cresc":
-        out += "*((t*" + alen + "%a)/a)";
-        break;
-      case "rise":
-        out += "*(1-pow(1-(t*" + alen + "%a)/a,b))";
-        break;
-      case "fall":
-        out += "*(1-pow((t*" + alen + "%a)/a,b))";
-        break;
+    if (out != "") {
+      switch (this.fx) {
+        case "note":
+          out += "*(1-(t*" + alen + "%a)/a)";
+          break;
+        case "cresc":
+          out += "*((t*" + alen + "%a)/a)";
+          break;
+        case "rise":
+          out += "*(1-pow(1-(t*" + alen + "%a)/a,b))";
+          break;
+        case "fall":
+          out += "*(1-pow((t*" + alen + "%a)/a,b))";
+          break;
+      }
     }
     return out;
   }
