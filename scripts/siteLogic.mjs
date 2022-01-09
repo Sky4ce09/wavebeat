@@ -1,17 +1,17 @@
 import { Track, Loop, Wave } from "./classes.mjs";
 
 //internal bookkeeping for loops and waves for (hopefully) easier modification
+// TODO: can these be scoped better?
 const track = new Track();
-const maxWaveStack = 0;
-const rowlist = [];
+let maxWaveStack = 0;
+let rowlist = []; // TODO: this is only set once at buildHTML, is that neccecary?
+let ids = { loop: 0, row: 0 }; // TODO: this is only set once at buildHTML, is that neccecary? it's also barely used, so 
 
-const ids = { loop: 0, row: 0 };
+// TODO: this function is definetly unneccecary
 function generate(type, name) {
 	const out = document.createElement(type);
-	const attr = document.createAttribute("id");
-	attr.value = name + ids[name];
+	out.id = name + ids[name];
 	ids[name]++;
-	out.setAttributeNode(attr);
 	return out;
 }
 
@@ -20,60 +20,40 @@ function addNewLoop(name) {
 
 	for (const i in rowlist) {
 		const ntd = document.createElement("td");
-		const attr = document.createAttribute("id");
-		attr.value = `${track.loops.length - 1} ${i}`;
-		ntd.setAttributeNode(attr);
-		attr = document.createAttribute("nowrap");
-		ntd.setAttributeNode(attr);
+		ntd.id = `${track.loops.length - 1} ${i}`;
+		ntd.nowrap = "";
 		rowlist[i].append(ntd);
 	}
 
 	const newS = generate("td", "loop");
-	const nowrap = document.createAttribute("nowrap");
-	newS.setAttributeNode(nowrap);
+	newS.nowrap = "";
 
 	const btn = document.createElement("input");
-	const attr = document.createAttribute("type");
-	attr.value = "button";
-	btn.setAttributeNode(attr);
-	attr = document.createAttribute("value");
-	attr.value = "Add wave";
-	btn.setAttributeNode(attr);
+	btn.type = "button";
+	btn.value = "Add wave";
 	btn.addEventListener("click", function () {
-		const i = btn.parentElement.getAttribute("id");
+		const i = btn.parentElement.id;
 		track.loops[i.substring(i.length - 1, i.length) * 1].waves.push(new Wave());
 		buildHtml();
 	});
-	newS.appendChild(btn);
+	newS.append(btn);
 
 	btn = document.createElement("input");
-	attr = document.createAttribute("type");
-	attr.value = "button";
-	btn.setAttributeNode(attr);
-	attr = document.createAttribute("value");
-	attr.value = "Deconste";
-	btn.setAttributeNode(attr);
+	btn.type = "button";
+	btn.value = "Deconste";
 	btn.addEventListener("click", function () {
-		deconsteLoop(btn.parentElement.getAttribute("id").substring(4, 5) * 1);
+		deconsteLoop(btn.parentElement.id.substring(4, 5) * 1);
 	});
-	newS.appendChild(btn);
+	newS.append(btn);
 
 	const newtf = document.createElement("input");
-	attr = document.createAttribute("type");
-	attr.value = "text";
-	newtf.setAttributeNode(attr);
-	attr = document.createAttribute("size");
-	attr.value = "8";
-	newtf.setAttributeNode(attr);
-	attr = document.createAttribute("value");
-	attr.value = name;
-	newtf.setAttributeNode(attr);
-	newtf.oninput = function () {
-		evaluateHtml();
-	};
-	newS.appendChild(newtf);
+	newtf.type = "text";
+	newtf.size = "8";
+	newtf.value = name;
+	newtf.addEventListener("click", () => evaluateHtml());
+	newS.append(newtf);
 
-	document.getElementById("looplist").appendChild(newS);
+	document.getElementById("looplist").append(newS);
 }
 //int: internal element
 function addWave(refID, o, int) {
@@ -81,11 +61,8 @@ function addWave(refID, o, int) {
 		const row = generate("tr", "row");
 		for (const x in track.loops) {
 			const ntd = document.createElement("td");
-			const attr = document.createAttribute("id");
-			attr.value = `${x} ${rowlist.length}`;
-			ntd.setAttributeNode(attr);
-			attr = document.createAttribute("nowrap");
-			ntd.setAttributeNode(attr);
+			ntd.id = `${x} ${rowlist.length}`;
+			ntd.nowrap = "";
 			row.append(ntd);
 		}
 		rowlist.push(row);
@@ -93,117 +70,45 @@ function addWave(refID, o, int) {
 		maxWaveStack++;
 	}
 	// else { // TODO: this never gets used?
-		//const row = document.getElementById(`row${track.loops[refID].waves.length}`);
+	//const row = document.getElementById(`row${track.loops[refID].waves.length}`);
 	//}
 	const nW = document.createElement("span");
 
+	for (const value of [
+		int.type,
+		int.fx,
+		int.vol,
+		int.frq,
+		int.hol,
+	]) {
+		const add = document.createElement("input");
+		add.type = "text";
+		add.size = "2";
+		add.value = value;
+		add.addEventListener("input", () => evaluateHtml());
+		nW.append(add);
+	}
+
 	const add = document.createElement("input");
-	const a = document.createAttribute("type");
-	a.value = "text";
-	add.setAttributeNode(a);
-	a = document.createAttribute("size");
-	a.value = "2";
-	add.setAttributeNode(a);
-	a = document.createAttribute("value");
-	a.value = int.type;
-	add.setAttributeNode(a);
-	add.oninput = function () {
-		evaluateHtml();
-	};
+	add.type = "button";
+	add.value = "Deconste";
+	add.addEventListener("click", () => deconsteWave(nW));
 	nW.append(add);
 
-	add = document.createElement("input");
-	a = document.createAttribute("type");
-	a.value = "text";
-	add.setAttributeNode(a);
-	a = document.createAttribute("size");
-	a.value = "2";
-	add.setAttributeNode(a);
-	a = document.createAttribute("value");
-	a.value = int.fx;
-	add.setAttributeNode(a);
-	add.oninput = function () {
-		evaluateHtml();
-	};
-	nW.append(add);
-
-	add = document.createElement("input");
-	a = document.createAttribute("type");
-	a.value = "text";
-	add.setAttributeNode(a);
-	a = document.createAttribute("size");
-	a.value = "1";
-	add.setAttributeNode(a);
-	a = document.createAttribute("value");
-	a.value = int.vol;
-	add.setAttributeNode(a);
-	add.oninput = function () {
-		evaluateHtml();
-	};
-	nW.append(add);
-
-	add = document.createElement("input");
-	a = document.createAttribute("type");
-	a.value = "text";
-	add.setAttributeNode(a);
-	a = document.createAttribute("size");
-	a.value = "1";
-	add.setAttributeNode(a);
-	a = document.createAttribute("value");
-	a.value = int.frq;
-	add.setAttributeNode(a);
-	add.oninput = function () {
-		evaluateHtml();
-	};
-	nW.append(add);
-
-	add = document.createElement("input");
-	a = document.createAttribute("type");
-	a.value = "text";
-	add.setAttributeNode(a);
-	a = document.createAttribute("size");
-	a.value = "1";
-	add.setAttributeNode(a);
-	a = document.createAttribute("value");
-	a.value = int.hol;
-	add.setAttributeNode(a);
-	add.oninput = function () {
-		evaluateHtml();
-	};
-	nW.append(add);
-
-	add = document.createElement("input");
-	a = document.createAttribute("type");
-	a.value = "button";
-	add.setAttributeNode(a);
-	a = document.createAttribute("value");
-	a.value = "Deconste";
-	add.setAttributeNode(a);
-	add.addEventListener("click", function () {
-		deconsteWave(nW);
-	});
-	nW.append(add);
-
-	document.getElementById(refID + " " + o).append(nW);
-	a = document.createAttribute("id");
-	a.value = refID + "b" + o;
-	nW.setAttributeNode(a);
+	document.getElementById(`${refID} ${o}`).append(nW);
+	nW.id = `${refID}b${o}`;
 }
 function deconsteWave(element) {
 	const targetArray =
 		track.loops[
-			element
-				.getAttribute("id")
-				.substring(0, element.getAttribute("id").indexOf("b")) * 1
+			element.id.substring(0, element.id.indexOf("b")) * 1
 		].waves;
 	const toRemove =
 		targetArray[
-		element
-			.getAttribute("id")
-			.substring(
-				element.getAttribute("id").indexOf("b") + 1,
-				element.getAttribute("id").length
-			) * 1
+		element.id.substring(
+			element.id.indexOf("b") + 1,
+			element.id.length
+		) * 1
 		];
 	const copy = [];
 	for (const target of targetArray)
@@ -211,9 +116,7 @@ function deconsteWave(element) {
 			copy.push(target);
 	console.log(targetArray, copy, toRemove);
 	track.loops[
-		element
-			.getAttribute("id")
-			.substring(0, element.getAttribute("id").indexOf("b")) * 1
+		element.id.substring(0, element.id.indexOf("b")) * 1
 	].waves = copy;
 	buildHtml();
 }
@@ -228,20 +131,18 @@ function deconsteLoop(index) {
 //i am desperate. this function should be unnecessary.
 //it does make short work of gaps between waves tho
 function buildHtml() {
-	rowlist = [];
+	rowlist = []; // TODO: is initializing these globals neccecary?
 	maxWaveStack = 0;
 	ids = { loop: 0, row: 0 };
+
 	document.getElementById("looplistRows").remove();
 	const a = document.createElement("tbody");
-	const att = document.createAttribute("id");
-	att.value = "looplistRows";
-	a.setAttributeNode(att);
+	a.id = "looplistRows";
 	const add = document.createElement("tr");
-	att = document.createAttribute("id");
-	att.value = "looplist";
-	add.setAttributeNode(att);
+	add.id = "looplist";
 	a.append(add);
 	document.getElementById("tab").append(a);
+
 	for (const loop of track.loops)
 		addNewLoop(loop.name);
 	for (const i in track.loops)
@@ -260,7 +161,7 @@ function evaluateHtml() {
 				const children = document.getElementById(`${x}b${y}`).children;
 				const customs = [];
 				for (const el of children)
-					if (el.getAttribute("type") == "text")
+					if (el.type == "text")
 						customs.push(el);
 				const h = track.loops[x].waves[y];
 				h.type = customs[0].value;
