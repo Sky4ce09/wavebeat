@@ -18,10 +18,10 @@ function generate(type, name) {
 function addNewLoop(name) {
 	//loop1 loop2 funny c: || newtf stands for new text field
 
-	for (const i = 0; i < rowlist.length; i++) {
+	for (const i in rowlist) {
 		const ntd = document.createElement("td");
 		const attr = document.createAttribute("id");
-		attr.value = track.loops.length - 1 + " " + i;
+		attr.value = `${track.loops.length - 1} ${i}`;
 		ntd.setAttributeNode(attr);
 		attr = document.createAttribute("nowrap");
 		ntd.setAttributeNode(attr);
@@ -32,11 +32,8 @@ function addNewLoop(name) {
 	const nowrap = document.createAttribute("nowrap");
 	newS.setAttributeNode(nowrap);
 
-	const newtf;
-	const attr;
-
 	const btn = document.createElement("input");
-	attr = document.createAttribute("type");
+	const attr = document.createAttribute("type");
 	attr.value = "button";
 	btn.setAttributeNode(attr);
 	attr = document.createAttribute("value");
@@ -61,7 +58,7 @@ function addNewLoop(name) {
 	});
 	newS.appendChild(btn);
 
-	newtf = document.createElement("input");
+	const newtf = document.createElement("input");
 	attr = document.createAttribute("type");
 	attr.value = "text";
 	newtf.setAttributeNode(attr);
@@ -80,13 +77,12 @@ function addNewLoop(name) {
 }
 //int: internal element
 function addWave(refID, o, int) {
-	const row;
 	if (track.loops[refID].waves.length >= maxWaveStack) {
-		row = generate("tr", "row");
-		for (const x = 0; x < track.loops.length; x++) {
+		const row = generate("tr", "row");
+		for (const x in track.loops) {
 			const ntd = document.createElement("td");
 			const attr = document.createAttribute("id");
-			attr.value = x + " " + rowlist.length;
+			attr.value = `${x} ${rowlist.length}`;
 			ntd.setAttributeNode(attr);
 			attr = document.createAttribute("nowrap");
 			ntd.setAttributeNode(attr);
@@ -95,9 +91,10 @@ function addWave(refID, o, int) {
 		rowlist.push(row);
 		looplistRows.append(row);
 		maxWaveStack++;
-	} else {
-		row = document.getElementById("row" + track.loops[refID].waves.length);
 	}
+	// else { // TODO: this never gets used?
+		//const row = document.getElementById(`row${track.loops[refID].waves.length}`);
+	//}
 	const nW = document.createElement("span");
 
 	const add = document.createElement("input");
@@ -209,11 +206,9 @@ function deconsteWave(element) {
 			) * 1
 		];
 	const copy = [];
-	for (const i = 0; i < targetArray.length; i++) {
-		if (targetArray[i] != toRemove) {
-			copy.push(targetArray[i]);
-		}
-	}
+	for (const target of targetArray)
+		if (target != toRemove)
+			copy.push(target);
 	console.log(targetArray, copy, toRemove);
 	track.loops[
 		element
@@ -224,11 +219,9 @@ function deconsteWave(element) {
 }
 function deconsteLoop(index) {
 	const copy = [];
-	for (const i = 0; i < track.loops.length; i++) {
-		if (i != index) {
+	for (const i of track.loops)
+		if (i != index)
 			copy.push(track.loops[i]);
-		}
-	}
 	track.loops = copy;
 	buildHtml();
 }
@@ -249,14 +242,11 @@ function buildHtml() {
 	add.setAttributeNode(att);
 	a.append(add);
 	document.getElementById("tab").append(a);
-	for (const i = 0; i < track.loops.length; i++) {
-		addNewLoop(track.loops[i].name);
-	}
-	for (const i = 0; i < track.loops.length; i++) {
-		for (const j = 0; j < track.loops[i].waves.length; j++) {
+	for (const loop of track.loops)
+		addNewLoop(loop.name);
+	for (const i in track.loops)
+		for (const j in track.loops[i].waves)
 			addWave(i, j, track.loops[i].waves[j]);
-		}
-	}
 	evaluateHtml();
 }
 function evaluateHtml() {
@@ -264,16 +254,14 @@ function evaluateHtml() {
 		track.m = document.getElementById("loopDuration").value;
 		track.loopLen =
 			(document.getElementById("sampleRate").value * track.m) / 1000;
-		for (const x = 0; x < track.loops.length; x++) {
-			track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
-			for (const y = 0; y < track.loops[x].waves.length; y++) {
-				const children = document.getElementById(x + "b" + y).children;
+		for (const x in track.loops) {
+			track.loops[x].name = document.getElementById(`loop${x}`).lastChild.value;
+			for (const y in track.loops[x].waves) {
+				const children = document.getElementById(`${x}b${y}`).children;
 				const customs = [];
-				for (const el of children) {
-					if (el.getAttribute("type") == "text") {
+				for (const el of children)
+					if (el.getAttribute("type") == "text")
 						customs.push(el);
-					}
-				}
 				const h = track.loops[x].waves[y];
 				h.type = customs[0].value;
 				h.fx = customs[1].value;
@@ -284,9 +272,9 @@ function evaluateHtml() {
 			}
 		}
 		document.getElementById("output").value = track.parse();
-	} catch (e) { }
+	} catch (e) { } // TODO: just catching a massive statement like this is terrible
 }
-const templateAtt;
+
 const templates = {};
 templates.loopTemplate = generate("span", "loop");
 //prepare event listener

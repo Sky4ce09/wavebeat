@@ -8,12 +8,12 @@ class Track {
 		Object.seal(this);
 	}
 	parse() {
-		const index = document.getElementById("loopIndex").value.split().map(e => parseInt(e));
+		const indicies = document.getElementById("loopIndex").value.split().map(e => parseInt(e));
 		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[`;
-		for (let i in index)
-			out += `${this.loops[index[i]].parse()},\n`;
+		for (const index in indicies)
+			out += `${this.loops[index].parse()},\n`;
 		out = out.substring(0, out.length - 2);
-		out += `][floor(t/a)%${index.length}]`;
+		out += `][floor(t/a)%${indicies.length}]`;
 		return out;
 	}
 }
@@ -28,8 +28,8 @@ class Loop {
 	}
 	parse() {
 		let out = `[`;
-		for (let i in this.waves)
-			out += `${this.waves[i].parse(this.waves.length)},\n`;
+		for (const wave of this.waves)
+			out += `${wave.parse(this.waves.length)},\n`;
 		out = out.substring(0, out.length - 2);
 		out += `][floor(t*${this.waves.length}/a%${this.waves.length})]`;
 		return out;
@@ -71,7 +71,7 @@ class Wave {
 				out = `(${39.6 * this.frq * this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t%a<a/2)`;
 				break;
 		}
-		if (out) {
+		if (out)
 			switch (this.fx) {
 				case "note":
 					out += `*(1-(t*${alen}%a)/a)`;
@@ -86,7 +86,6 @@ class Wave {
 					out += `*(1-pow((t*${alen}%a)/a,b))`;
 					break;
 			}
-		}
 		return out;
 	}
 }
