@@ -105,8 +105,11 @@ class Wave {
           this.vol +
           ")*(t%a<a/2)";
         break;
+      default:
+        out = "0";
+        break;
     }
-    if (out != "") {
+    if (out != "0") {
       switch (this.fx) {
         case "note":
           out += "*(1-(t*" + alen + "%a)/a)";
