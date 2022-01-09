@@ -81,7 +81,11 @@ class Wave {
         out =
           "(" +
           39.6 * this.frq * this.vol +
-          "/(t%a/" +
+          "/(t*" +
+          alen +
+          "%(a/" +
+          alen +
+          ")/" +
           this.hol +
           ")%" +
           this.vol +
@@ -91,7 +95,11 @@ class Wave {
         out =
           "(" +
           39.6 * this.frq * this.vol +
-          "/(t%a/" +
+          "/(t*" +
+          alen +
+          "%(a/" +
+          alen +
+          ")/" +
           this.hol +
           ")%" +
           this.vol +

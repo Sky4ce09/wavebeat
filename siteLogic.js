@@ -55,10 +55,10 @@ function addNewLoop(name) {
   attr.value = "Delete";
   btn.setAttributeNode(attr);
   btn.addEventListener("click", function () {
-    deleteLoop(btn.parentElement.getAttribute("id").substring(4,5) * 1);
+    deleteLoop(btn.parentElement.getAttribute("id").substring(4, 5) * 1);
   });
   newS.appendChild(btn);
-  
+
   newtf = document.createElement("input");
   attr = document.createAttribute("type");
   attr.value = "text";
@@ -69,7 +69,9 @@ function addNewLoop(name) {
   attr = document.createAttribute("value");
   attr.value = name;
   newtf.setAttributeNode(attr);
-  newtf.oninput = function(){evaluateHtml()}
+  newtf.oninput = function () {
+    evaluateHtml();
+  };
   newS.appendChild(newtf);
 
   document.getElementById("looplist").appendChild(newS);
@@ -106,7 +108,9 @@ function addWave(refID, o, int) {
   a = document.createAttribute("value");
   a.value = int.type;
   add.setAttributeNode(a);
-  add.oninput = function(){evaluateHtml()}
+  add.oninput = function () {
+    evaluateHtml();
+  };
   nW.append(add);
 
   add = document.createElement("input");
@@ -119,7 +123,9 @@ function addWave(refID, o, int) {
   a = document.createAttribute("value");
   a.value = int.fx;
   add.setAttributeNode(a);
-  add.oninput = function(){evaluateHtml()}
+  add.oninput = function () {
+    evaluateHtml();
+  };
   nW.append(add);
 
   add = document.createElement("input");
@@ -132,7 +138,9 @@ function addWave(refID, o, int) {
   a = document.createAttribute("value");
   a.value = int.vol;
   add.setAttributeNode(a);
-  add.oninput = function(){evaluateHtml()}
+  add.oninput = function () {
+    evaluateHtml();
+  };
   nW.append(add);
 
   add = document.createElement("input");
@@ -145,7 +153,9 @@ function addWave(refID, o, int) {
   a = document.createAttribute("value");
   a.value = int.frq;
   add.setAttributeNode(a);
-  add.oninput = function(){evaluateHtml()}
+  add.oninput = function () {
+    evaluateHtml();
+  };
   nW.append(add);
 
   add = document.createElement("input");
@@ -158,7 +168,9 @@ function addWave(refID, o, int) {
   a = document.createAttribute("value");
   a.value = int.hol;
   add.setAttributeNode(a);
-  add.oninput = function(){evaluateHtml()}
+  add.oninput = function () {
+    evaluateHtml();
+  };
   nW.append(add);
 
   add = document.createElement("input");
@@ -247,30 +259,29 @@ function buildHtml() {
 }
 function evaluateHtml() {
   try {
-    if (document.getElementById("loopIndex").value != "") {
-      track.m = document.getElementById("loopDuration").value;
-      track.loopLen = document.getElementById("sampleRate").value * track.m / 1000;
-      for (let x = 0; x < track.loops.length; x++) {
-        track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
-        for (let y = 0; y < track.loops[x].waves.length; y++) {
-          let children = document.getElementById(x + "b" + y).children;
-          let customs = [];
-          for (let el of children) {
-            if (el.getAttribute("type") == "text") {
-              customs.push(el);
-            }
+    track.m = document.getElementById("loopDuration").value;
+    track.loopLen =
+      (document.getElementById("sampleRate").value * track.m) / 1000;
+    for (let x = 0; x < track.loops.length; x++) {
+      track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
+      for (let y = 0; y < track.loops[x].waves.length; y++) {
+        let children = document.getElementById(x + "b" + y).children;
+        let customs = [];
+        for (let el of children) {
+          if (el.getAttribute("type") == "text") {
+            customs.push(el);
           }
-          let h = track.loops[x].waves[y];
-          h.type = customs[0].value;
-          h.fx = customs[1].value;
-          h.vol = customs[2].value;
-          h.frq = customs[3].value;
-          h.hol = customs[4].value;
-          track.loops[x].waves[y] = h;
         }
+        let h = track.loops[x].waves[y];
+        h.type = customs[0].value;
+        h.fx = customs[1].value;
+        h.vol = customs[2].value;
+        h.frq = customs[3].value;
+        h.hol = customs[4].value;
+        track.loops[x].waves[y] = h;
       }
-      document.getElementById("output").value = track.parse();
     }
+    document.getElementById("output").value = track.parse();
   } catch (e) {}
 }
 let templateAtt;
