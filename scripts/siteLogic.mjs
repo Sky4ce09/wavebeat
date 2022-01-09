@@ -28,23 +28,24 @@ function addNewLoop(name) {
 	const newS = generate("td", "loop");
 	newS.nowrap = "";
 
-	const btn = document.createElement("input");
-	btn.type = "button";
-	btn.value = "Add wave";
-	btn.addEventListener("click", function () {
-		const i = btn.parentElement.id;
+	const addWaveButton = document.createElement("input");
+	addWaveButton.type = "button";
+	addWaveButton.value = "Add wave";
+	addWaveButton.addEventListener("click", function () {
+		const i = addWaveButton.parentElement.id;
 		track.loops[i.substring(i.length - 1, i.length) * 1].waves.push(new Wave());
 		buildHtml();
 	});
-	newS.append(btn);
+	newS.append(addWaveButton);
 
-	btn = document.createElement("input");
-	btn.type = "button";
-	btn.value = "Deconste";
-	btn.addEventListener("click", function () {
-		deconsteLoop(btn.parentElement.id.substring(4, 5) * 1);
+	const deconsteButton = document.createElement("input");
+	deconsteButton.type = "button";
+	deconsteButton.value = "Deconste";
+	deconsteButton.addEventListener("click", function () {
+		track.loops.splice(deconsteButton.parentElement.id.substring(4, 5) * 1, 1);
+		buildHtml();
 	});
-	newS.append(btn);
+	newS.append(deconsteButton);
 
 	const newtf = document.createElement("input");
 	newtf.type = "text";
@@ -120,14 +121,6 @@ function deconsteWave(element) {
 	].waves = copy;
 	buildHtml();
 }
-function deconsteLoop(index) {
-	const copy = [];
-	for (const i of track.loops)
-		if (i != index)
-			copy.push(track.loops[i]);
-	track.loops = copy;
-	buildHtml();
-}
 //i am desperate. this function should be unnecessary.
 //it does make short work of gaps between waves tho
 function buildHtml() {
@@ -183,3 +176,5 @@ document.getElementById("loopAdder").addEventListener("click", function () {
 	track.loops.push(new Loop());
 	buildHtml();
 });
+
+globalThis.evaluateHtml = evaluateHtml; // TODO: get rid of this
