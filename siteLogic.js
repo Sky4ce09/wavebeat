@@ -243,27 +243,33 @@ function buildHtml() {
       addWave(i, j, track.loops[i].waves[j]);
     }
   }
+  evaluateHtml();
 }
 function evaluateHtml() {
-  for (let x = 0; x < track.loops.length; x++) {
-    track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
-    for (let y = 0; y < track.loops[x].waves.length; y++) {
-      let children = document.getElementById(x + "b" + y).children;
-      let customs = [];
-      for (let el of children) {
-        if (el.getAttribute("type") == "text") {
-          customs.push(el);
+  try {
+    if (document.getElementById("loopIndex").value != "") {
+      for (let x = 0; x < track.loops.length; x++) {
+        track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
+        for (let y = 0; y < track.loops[x].waves.length; y++) {
+          let children = document.getElementById(x + "b" + y).children;
+          let customs = [];
+          for (let el of children) {
+            if (el.getAttribute("type") == "text") {
+              customs.push(el);
+            }
+          }
+          let h = track.loops[x].waves[y];
+          h.type = customs[0].value;
+          h.fx = customs[1].value;
+          h.vol = customs[2].value;
+          h.frq = customs[3].value;
+          h.hol = customs[4].value;
+          track.loops[x].waves[y] = h;
         }
       }
-      let h = track.loops[x].waves[y];
-      h.type = customs[0].value;
-      h.fx = customs[1].value;
-      h.vol = customs[2].value;
-      h.frq = customs[3].value;
-      h.hol = customs[4].value;
-      track.loops[x].waves[y] = h;
+      document.getElementById("output").value = track.parse();
     }
-  }
+  } catch (e) {}
 }
 let templateAtt;
 var templates = {};

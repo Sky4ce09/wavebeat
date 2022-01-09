@@ -1,9 +1,19 @@
-var outstr;
 class Track {
   //pass the amount of milliseconds for a loop to play, the desired sample rate and an array of loops
   constructor(loopLengthMillis = 500, sampleRate = 8000, loopList = []) {
+    this.m = loopLengthMillis;
     this.loopLen = (loopLengthMillis * sampleRate) / 1000;
     this.loops = loopList;
+  }
+  parse() {
+    let index = JSON.parse("[" + document.getElementById("loopIndex").value + "]");
+    let out = "a=" + this.loopLen + ",\nb=" + this.m/this.loopLen + ",\n["
+    for (let i = 0; i < index.length; i++) {
+      out += this.loops[index[i]].parse() + ",\n";
+    }
+    out = out.substring(0, out.length - 2);
+    out += "][floor(t/a)%" + index.length + "]"
+    return out;
   }
 }
 class Loop {
@@ -12,6 +22,15 @@ class Loop {
     this.name = n;
     this.waves = waveList;
     this.rate = this.waves.length;
+  }
+  parse() {
+    let out = "[";
+    for (let i = 0; i < this.waves.length; i++) {
+      out += this.waves[i].parse(this.waves.length) + ",\n";
+    }
+    out = out.substring(0, out.length - 2);
+    out += "][floor(t*" + this.waves.length + "/a%" + this.waves.length + ")]"
+    return out;
   }
 }
 class Wave {
@@ -29,7 +48,7 @@ class Wave {
     this.frq = frequency;
     this.hol = hold;
   }
-  parse() {
+  parse(alen) {
     let out = "";
     switch (this.type) {
       case "sine":
@@ -42,30 +61,55 @@ class Wave {
           this.vol / 2;
         break;
       case "square":
-        out = "((t*" + this.frq + "%" + 255 + ">" + (255 - this.hol) + ")*" + this.vol + ")";
+        out =
+          "((t*" +
+          this.frq +
+          "%" +
+          255 +
+          ">" +
+          (255 - this.hol) +
+          ")*" +
+          this.vol +
+          ")";
         break;
       case "sawtooth":
         out = "(t*" + (this.frq * this.vol) / 255 + "%" + this.vol + ")";
         break;
-      case "notesaw":
-        out = "(t*" + (this.frq * this.vol) / 255 + "%" + this.vol + ")*(1-(t%a)/a)";
-        break;
-      case "rnotesaw":
-        out = "(t*" + (this.frq * this.vol) / 255 + "%" + this.vol + ")*((t%a)/a)";
-        break;
-      case "hysaw":
-        out = "(t*" + (this.frq * this.vol) / 255 + "%" + this.vol + ")*(1-pow((t%a)/a,b))";
-        break;
-      case "rhysaw":
-        out = "(t*" + (this.frq * this.vol) / 255 + "%" + this.vol + ")*(1-pow(1-(t%a)/a,b))";
-        break;
       case "laser":
-        out = "(" + 39.6 * this.frq * this.vol + "/(t%a/" + this.hol + ")%" + this.vol + ")";
+        out =
+          "(" +
+          39.6 * this.frq * this.vol +
+          "/(t%a/" +
+          this.hol +
+          ")%" +
+          this.vol +
+          ")";
         break;
       case "halflaser":
         out =
-          "(" + 39.6 * this.frq * this.vol + "/(t%a/" + this.hol + ")%" + this.vol + ")*(t%a<a/2)";
+          "(" +
+          39.6 * this.frq * this.vol +
+          "/(t%a/" +
+          this.hol +
+          ")%" +
+          this.vol +
+          ")*(t%a<a/2)";
         break;
     }
+    switch (this.fx) {
+      case "note":
+        out += "*(1-(t*" + alen + "%a)/a)";
+        break;
+      case "cresc":
+        out += "*((t*" + alen + "%a)/a)";
+        break;
+      case "rise":
+        out += "*(1-pow(1-(t*" + alen + "%a)/a,b))";
+        break;
+      case "fall":
+        out += "*(1-pow((t*" + alen + "%a)/a,b))";
+        break;
+    }
+    return out;
   }
 }

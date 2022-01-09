@@ -6,9 +6,9 @@
     </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="in the making">
+    <meta name="description" content="Workplace for interested people">
     <meta name="keywords" content="bytebeat">
-    <title>Wavebeat</title>
+    <title>Wavebeat Station</title>
   </head>
   <body style="background-color: black;">
     <div id="editor" style="width: 1280px;">
@@ -18,6 +18,8 @@
         <span style="color: white">kHz</span>
         <input id="loopDuration" type="text" value=500 size="2" oninput="evaluateHtml()">
         <span style="color: white">ms (loop duration in milliseconds)</span>
+        <input id="loopIndex" type="text" value="" size="14" oninput="evaluateHtml()">
+        <span style="color: white">loop indices (as in 0,1,0,0,1 for myLoop0, myLoop1, myLoop0, myLoop0, myLoop1)</span>
       </div>
       <div id="loop-frame" style="overflow-x: scroll">
         <table id="tab">
@@ -30,7 +32,7 @@
     </div>
     <div>
       <h6 style="color: white;">Output:</h6>
-      <textarea readonly id="output" cols="160" rows="3">
+      <textarea readonly id="output" cols="64" rows="8">
       </textarea>
     </div>
     <div id="composerdiv">
@@ -65,6 +67,7 @@
         <li>cresc</li>
         <li>rise</li>
         <li>fall</li>
+        <li>any other value (to represent 'none')</li>
       </ul>
     </div>
   </body>
