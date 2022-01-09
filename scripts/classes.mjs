@@ -9,7 +9,7 @@ class Track {
 	}
 	parse() {
 		const indicies = document.getElementById("loopIndex").value.split(",").filter(e => e).map(e => parseInt(e));
-		console.log("indicies", indicies)
+		console.log("indicies", indicies);
 		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[`;
 		for (const index in indicies) {
 			if (index >= 0 && index < this.loops.length)
@@ -57,7 +57,7 @@ class Wave {
 		Object.seal(this);
 	}
 	parse(alen) {
-		let out;
+		let out = null;
 		switch (this.type) {
 			case "sine":
 				out = `(sin(t*${Math.log10(1.5 + this.frq / 16)})*${this.vol / 2})+${this.vol / 2}`;
@@ -75,7 +75,7 @@ class Wave {
 				out = `(${39.6 * this.frq * this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t%a<a/2)`;
 				break;
 		}
-		if (out)
+		if (out !== null)
 			switch (this.fx) {
 				case "note":
 					out += `*(1-(t*${alen}%a)/a)`;
@@ -88,6 +88,9 @@ class Wave {
 					break;
 				case "fall":
 					out += `*(1-pow((t*${alen}%a)/a,b))`;
+					break;
+				case "rand":
+					out += `*random()`;
 					break;
 			}
 		return out;
