@@ -38,14 +38,14 @@ function addNewLoop(name) {
 	});
 	newS.append(addWaveButton);
 
-	const deconsteButton = document.createElement("input");
-	deconsteButton.type = "button";
-	deconsteButton.value = "Deconste";
-	deconsteButton.addEventListener("click", function () {
-		track.loops.splice(deconsteButton.parentElement.id.substring(4, 5) * 1, 1);
+	const deleteButton = document.createElement("input");
+	deleteButton.type = "button";
+	deleteButton.value = "Delete";
+	deleteButton.addEventListener("click", function () {
+		track.loops.splice(deleteButton.parentElement.id.substring(4, 5) * 1, 1);
 		buildHtml();
 	});
-	newS.append(deconsteButton);
+	newS.append(deleteButton);
 
 	const newtf = document.createElement("input");
 	newtf.type = "text";
@@ -84,7 +84,7 @@ function addWave(refID, o, int) {
 	]) {
 		const add = document.createElement("input");
 		add.type = "text";
-		add.size = "2";
+		add.size = 2;
 		add.value = value;
 		add.addEventListener("input", () => evaluateHtml());
 		nW.append(add);
@@ -92,14 +92,14 @@ function addWave(refID, o, int) {
 
 	const add = document.createElement("input");
 	add.type = "button";
-	add.value = "Deconste";
-	add.addEventListener("click", () => deconsteWave(nW));
+	add.value = "Delete";
+	add.addEventListener("click", () => deleteWave(nW));
 	nW.append(add);
 
 	document.getElementById(`${refID} ${o}`).append(nW);
 	nW.id = `${refID}b${o}`;
 }
-function deconsteWave(element) {
+function deleteWave(element) {
 	const targetArray =
 		track.loops[
 			element.id.substring(0, element.id.indexOf("b")) * 1
