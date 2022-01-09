@@ -8,15 +8,12 @@ class Track {
 		Object.seal(this);
 	}
 	parse() {
-		const index = JSON.parse(
-			"[" + document.getElementById("loopIndex").value + "]"
-		);
-		const out = "a=" + this.loopLen + ",\nb=" + this.m / this.loopLen + ",\n[";
-		for (const i = 0; i < index.length; i++) {
-			out += this.loops[index[i]].parse() + ",\n";
-		}
+		const index = document.getElementById("loopIndex").value.split().map(e => parseInt(e));
+		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[`;
+		for (let i in index)
+			out += `${this.loops[index[i]].parse()},\n`;
 		out = out.substring(0, out.length - 2);
-		out += "][floor(t/a)%" + index.length + "]";
+		out += `][floor(t/a)%${index.length}]`;
 		return out;
 	}
 }
@@ -30,12 +27,11 @@ class Loop {
 		Object.seal(this);
 	}
 	parse() {
-		const out = "[";
-		for (const i = 0; i < this.waves.length; i++) {
-			out += this.waves[i].parse(this.waves.length) + ",\n";
-		}
+		let out = `[`;
+		for (let i in this.waves)
+			out += `${this.waves[i].parse(this.waves.length)},\n`;
 		out = out.substring(0, out.length - 2);
-		out += "][floor(t*" + this.waves.length + "/a%" + this.waves.length + ")]";
+		out += `][floor(t*${this.waves.length}/a%${this.waves.length})]`;
 		return out;
 	}
 }
@@ -57,74 +53,37 @@ class Wave {
 		Object.seal(this);
 	}
 	parse(alen) {
-		const out = "";
+		let out;
 		switch (this.type) {
 			case "sine":
-				out =
-					"(sin(t*" +
-					Math.log10(1.5 + this.frq / 16) +
-					")*" +
-					this.vol / 2 +
-					")+" +
-					this.vol / 2;
+				out = `(sin(t*${Math.log10(1.5 + this.frq / 16)})*${this.vol / 2})+${this.vol / 2}`;
 				break;
 			case "square":
-				out =
-					"((t*" +
-					this.frq +
-					"%" +
-					255 +
-					">" +
-					(255 - this.hol) +
-					")*" +
-					this.vol +
-					")";
+				out = `((t*${this.frq}%255>${255 - this.hol})*${this.vol})`;
 				break;
 			case "sawtooth":
-				out = "(t*" + (this.frq * this.vol) / 255 + "%" + this.vol + ")";
+				out = `(t*${(this.frq * this.vol) / 255}%${this.vol})`;
 				break;
 			case "laser":
-				out =
-					"(" +
-					39.6 * this.frq * this.vol +
-					"/(t*" +
-					alen +
-					"%(a/" +
-					alen +
-					")/" +
-					this.hol +
-					")%" +
-					this.vol +
-					")";
+				out = `(${39.6 * this.frq * this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
 				break;
 			case "halflaser":
-				out =
-					"(" +
-					39.6 * this.frq * this.vol +
-					"/(t*" +
-					alen +
-					"%(a/" +
-					alen +
-					")/" +
-					this.hol +
-					")%" +
-					this.vol +
-					")*(t%a<a/2)";
+				out = `(${39.6 * this.frq * this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t%a<a/2)`;
 				break;
 		}
-		if (out != "") {
+		if (out) {
 			switch (this.fx) {
 				case "note":
-					out += "*(1-(t*" + alen + "%a)/a)";
+					out += `*(1-(t*${alen}%a)/a)`;
 					break;
 				case "cresc":
-					out += "*((t*" + alen + "%a)/a)";
+					out += `*((t*${alen}%a)/a)`;
 					break;
 				case "rise":
-					out += "*(1-pow(1-(t*" + alen + "%a)/a,b))";
+					out += `*(1-pow(1-(t*${alen}%a)/a,b))`;
 					break;
 				case "fall":
-					out += "*(1-pow((t*" + alen + "%a)/a,b))";
+					out += `*(1-pow((t*${alen}%a)/a,b))`;
 					break;
 			}
 		}
