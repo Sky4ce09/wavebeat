@@ -102,25 +102,14 @@ function addWave(refID, o, int) {
 	nW.id = `${refID}b${o}`;
 }
 function deleteWave(element) {
-	const targetArray =
-		track.loops[
-			element.id.substring(0, element.id.indexOf("b")) * 1
-		].waves;
-	const toRemove =
-		targetArray[
-		element.id.substring(
+	const waves = track.loops[element.id.substring(0, element.id.indexOf("b")) * 1].waves;
+	waves.splice(
+		+element.id.substring(
 			element.id.indexOf("b") + 1,
 			element.id.length
-		) * 1
-		];
-	const copy = [];
-	for (const target of targetArray)
-		if (target !== toRemove)
-			copy.push(target);
-	console.log(targetArray, copy, toRemove);
-	track.loops[
-		element.id.substring(0, element.id.indexOf("b")) * 1
-	].waves = copy;
+		),
+		1
+	);
 	buildHtml();
 }
 //i am desperate. this function should be unnecessary.

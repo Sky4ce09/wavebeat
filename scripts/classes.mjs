@@ -8,16 +8,25 @@ class Track {
 		Object.seal(this);
 	}
 	parse() {
-		const indicies = document.getElementById("loopIndex").value.split(",").filter(e => e).map(e => parseInt(e));
-		console.log("indicies", indicies);
-		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[`;
-		for (const index in indicies) {
-			if (index >= 0 && index < this.loops.length)
-				out += `${this.loops[index].parse()},\n`;
-			else
-				return `(_=>{throw new SyntaxError("Invalid loop indicies!")})()`;
+		const indiciesString = document.getElementById("loopIndex").value;
+		let indiciesLen;
+
+		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[\n`;
+		if (indiciesString === "") {
+			out += `\t// NOTE: no loop indices!\n`;
+			indiciesLen = 0;
+		} else {
+			const indicies = indiciesString.split(",");
+			indiciesLen = indicies.length;
+			for (const index in indicies) {
+				const indexNum = parseInt(index);
+				if (index >= 0 && index < this.loops.length)
+					out += `\t${this.loops[index].parse()},\n`;
+				else
+					out += `\tundefined, // WARNING: invalid loop index ${JSON.stringify(index)}!\n`;
+			}
 		}
-		out += `][floor(t/a)%${indicies.length}]`;
+		out += `][floor(t/a)%${indiciesLen}]`;
 		return out;
 	}
 }
@@ -31,11 +40,13 @@ class Loop {
 		Object.seal(this);
 	}
 	parse() {
-		let out = `[`;
-		for (const wave of this.waves)
-			out += `${wave.parse(this.waves.length)},\n`;
-		out = out.substring(0, out.length - 2);
-		out += `][floor(t*${this.waves.length}/a%${this.waves.length})]`;
+		let out = `[\n`;
+		if (this.waves.length === 0)
+			out += `\t\t// NOTE: no waves!\n`;
+		else
+			for (const wave of this.waves)
+				out += `\t\t${wave.parse(this.waves.length)},\n`;
+		out += `\t][floor(t*${this.waves.length}/a%${this.waves.length})]`;
 		return out;
 	}
 }
@@ -93,7 +104,7 @@ class Wave {
 					out += `*random()`;
 					break;
 			}
-		return out;
+		return out ?? 0;
 	}
 }
 
