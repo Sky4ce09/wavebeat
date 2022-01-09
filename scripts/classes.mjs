@@ -18,7 +18,7 @@ class Track {
 		} else {
 			const indicies = indiciesString.split(",");
 			indiciesLen = indicies.length;
-			for (const index in indicies) {
+			for (const index of indicies) {
 				const indexNum = parseInt(index);
 				if (index >= 0 && index < this.loops.length)
 					out += `\t${this.loops[index].parse()},\n`;
