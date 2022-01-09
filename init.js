@@ -120,6 +120,9 @@ class Wave {
         case "fall":
           out += "*(1-pow((t*" + alen + "%a)/a,b))";
           break;
+        case "rand":
+          out += "*random()";
+          break;
       }
     }
     return out;
