@@ -8,11 +8,15 @@ class Track {
 		Object.seal(this);
 	}
 	parse() {
-		const indicies = document.getElementById("loopIndex").value.split().map(e => parseInt(e));
+		const indicies = document.getElementById("loopIndex").value.split(",").filter(e => e).map(e => parseInt(e));
+		console.log("indicies", indicies)
 		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[`;
-		for (const index in indicies)
-			out += `${this.loops[index].parse()},\n`;
-		out = out.substring(0, out.length - 2);
+		for (const index in indicies) {
+			if (index >= 0 && index < this.loops.length)
+				out += `${this.loops[index].parse()},\n`;
+			else
+				return `(_=>{throw new SyntaxError("Invalid loop indicies!")})()`;
+		}
 		out += `][floor(t/a)%${indicies.length}]`;
 		return out;
 	}

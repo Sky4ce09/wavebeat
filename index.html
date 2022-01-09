@@ -16,9 +16,9 @@
 	<section id="editor" style="width: 1280px;">
 		<div>
 			<input id="loopAdder" type="button" value="Add a new loop">
-			<input id="sampleRate" type="text" value=8000 size="2" oninput="evaluateHtml()">
-			<label for="sampleRate" style="color: white">kHz</label>
-			<input id="loopDuration" type="text" value=500 size="2" oninput="evaluateHtml()">
+			<input id="sampleRate" type="text" value="8000" size="2" oninput="evaluateHtml()">
+			<label for="sampleRate" style="color: white">Hz</label>
+			<input id="loopDuration" type="text" value="500" size="2" oninput="evaluateHtml()">
 			<lavel for="loopDuration" style="color: white">ms (loop duration in milliseconds)</lavel>
 			<input id="loopIndex" type="text" value="" size="14" oninput="evaluateHtml()">
 			<label for="loopIndex" style="color: white">loop indices (as in 0,1,0,0,1 for myLoop0, myLoop1, myLoop0, myLoop0, myLoop1)</label>
@@ -33,7 +33,7 @@
 		</div>
 	</section>
 	<section id="composerdiv">
-		<iframe id="bytebeatcomposer" src="https://sarpnt.github.io/bytebeat-composer/embeddable.html" alt="oh no" style="width: 100%; height: 500px;"></iframe>
+		<iframe id="bytebeatcomposer" alt="oh no" style="width: 100%; height: 500px;"></iframe>
 		<p id="link" style="color: white;">
 			<a href="https://sarpnt.github.io/bytebeat-composer" target="_blank">SArpnt bytebeat composer</a>
 		</p>

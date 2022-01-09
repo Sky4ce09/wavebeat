@@ -1,5 +1,7 @@
 import { Track, Loop, Wave } from "./classes.mjs";
 
+const iframeSrc = "https://sarpnt.github.io/bytebeat-composer/embeddable.html";
+
 //internal bookkeeping for loops and waves for (hopefully) easier modification
 // TODO: can these be scoped better?
 const track = new Track();
@@ -144,29 +146,31 @@ function buildHtml() {
 	evaluateHtml();
 }
 function evaluateHtml() {
-	try {
-		track.m = document.getElementById("loopDuration").value;
-		track.loopLen =
-			(document.getElementById("sampleRate").value * track.m) / 1000;
-		for (const x in track.loops) {
-			track.loops[x].name = document.getElementById(`loop${x}`).lastChild.value;
-			for (const y in track.loops[x].waves) {
-				const children = document.getElementById(`${x}b${y}`).children;
-				const customs = [];
-				for (const el of children)
-					if (el.type == "text")
-						customs.push(el);
-				const h = track.loops[x].waves[y];
-				h.type = customs[0].value;
-				h.fx = customs[1].value;
-				h.vol = customs[2].value;
-				h.frq = customs[3].value;
-				h.hol = customs[4].value;
-				track.loops[x].waves[y] = h;
-			}
+	track.m = document.getElementById("loopDuration").value;
+	track.loopLen = (document.getElementById("sampleRate").value * track.m) / 1000;
+	for (const x in track.loops) {
+		track.loops[x].name = document.getElementById(`loop${x}`).lastChild.value;
+		for (const y in track.loops[x].waves) {
+			const children = document.getElementById(`${x}b${y}`).children;
+			const customs = [];
+			for (const el of children)
+				if (el.type == "text")
+					customs.push(el);
+			const h = track.loops[x].waves[y];
+			h.type = customs[0].value;
+			h.fx = customs[1].value;
+			h.vol = customs[2].value;
+			h.frq = customs[3].value;
+			h.hol = customs[4].value;
+			track.loops[x].waves[y] = h;
 		}
-		document.getElementById("output").value = track.parse();
-	} catch (e) { } // TODO: just catching a massive statement like this is terrible
+	}
+	document.getElementById("bytebeatcomposer").contentWindow.postMessage({
+		setSong: {
+			code: track.parse(),
+			sampleRate: document.getElementById("sampleRate").value,
+		}
+	}, iframeSrc);
 }
 
 const templates = {};
@@ -178,3 +182,8 @@ document.getElementById("loopAdder").addEventListener("click", function () {
 });
 
 globalThis.evaluateHtml = evaluateHtml; // TODO: get rid of this
+
+document.getElementById("bytebeatcomposer").addEventListener("load", () => {
+	document.getElementById("bytebeatcomposer").contentWindow.postMessage({ show: { songControls: false } }, iframeSrc);
+});
+document.getElementById("bytebeatcomposer").src = iframeSrc;
