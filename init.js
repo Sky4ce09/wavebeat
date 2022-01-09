@@ -8,7 +8,8 @@ class Track {
 }
 class Loop {
   //pass an array of waves
-  constructor(waveList = []) {
+  constructor(waveList = [], n = "New Loop") {
+    this.name = n;
     this.waves = waveList;
     this.rate = this.waves.length;
   }
