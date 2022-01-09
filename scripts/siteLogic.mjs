@@ -115,7 +115,7 @@ function deleteWave(element) {
 		];
 	const copy = [];
 	for (const target of targetArray)
-		if (target != toRemove)
+		if (target !== toRemove)
 			copy.push(target);
 	console.log(targetArray, copy, toRemove);
 	track.loops[
@@ -154,7 +154,7 @@ function evaluateHtml() {
 			const children = document.getElementById(`${x}b${y}`).children;
 			const customs = [];
 			for (const el of children)
-				if (el.type == "text")
+				if (el.type === "text")
 					customs.push(el);
 			const h = track.loops[x].waves[y];
 			h.type = customs[0].value;
