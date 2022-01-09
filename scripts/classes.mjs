@@ -4,13 +4,15 @@ class Track {
 		this.m = loopLengthMillis;
 		this.loopLen = (loopLengthMillis * sampleRate) / 1000;
 		this.loops = loopList;
+
+		Object.seal(this);
 	}
 	parse() {
-		let index = JSON.parse(
+		const index = JSON.parse(
 			"[" + document.getElementById("loopIndex").value + "]"
 		);
-		let out = "a=" + this.loopLen + ",\nb=" + this.m / this.loopLen + ",\n[";
-		for (let i = 0; i < index.length; i++) {
+		const out = "a=" + this.loopLen + ",\nb=" + this.m / this.loopLen + ",\n[";
+		for (const i = 0; i < index.length; i++) {
 			out += this.loops[index[i]].parse() + ",\n";
 		}
 		out = out.substring(0, out.length - 2);
@@ -24,10 +26,12 @@ class Loop {
 		this.name = n;
 		this.waves = waveList;
 		this.rate = this.waves.length;
+
+		Object.seal(this);
 	}
 	parse() {
-		let out = "[";
-		for (let i = 0; i < this.waves.length; i++) {
+		const out = "[";
+		for (const i = 0; i < this.waves.length; i++) {
 			out += this.waves[i].parse(this.waves.length) + ",\n";
 		}
 		out = out.substring(0, out.length - 2);
@@ -49,9 +53,11 @@ class Wave {
 		this.vol = volume;
 		this.frq = frequency;
 		this.hol = hold;
+
+		Object.seal(this);
 	}
 	parse(alen) {
-		let out = "";
+		const out = "";
 		switch (this.type) {
 			case "sine":
 				out =
@@ -125,3 +131,5 @@ class Wave {
 		return out;
 	}
 }
+
+export { Track, Loop, Wave };

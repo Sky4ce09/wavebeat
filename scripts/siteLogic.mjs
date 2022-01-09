@@ -1,12 +1,14 @@
-//internal bookkeeping for loops and waves for (hopefully) easier modification
-var track = new Track();
-var maxWaveStack = 0;
-var rowlist = [];
+import { Track, Loop, Wave } from "./classes.mjs";
 
-var ids = { loop: 0, row: 0 };
+//internal bookkeeping for loops and waves for (hopefully) easier modification
+const track = new Track();
+const maxWaveStack = 0;
+const rowlist = [];
+
+const ids = { loop: 0, row: 0 };
 function generate(type, name) {
-	let out = document.createElement(type);
-	let attr = document.createAttribute("id");
+	const out = document.createElement(type);
+	const attr = document.createAttribute("id");
 	attr.value = name + ids[name];
 	ids[name]++;
 	out.setAttributeNode(attr);
@@ -16,9 +18,9 @@ function generate(type, name) {
 function addNewLoop(name) {
 	//loop1 loop2 funny c: || newtf stands for new text field
 
-	for (let i = 0; i < rowlist.length; i++) {
-		let ntd = document.createElement("td");
-		let attr = document.createAttribute("id");
+	for (const i = 0; i < rowlist.length; i++) {
+		const ntd = document.createElement("td");
+		const attr = document.createAttribute("id");
 		attr.value = track.loops.length - 1 + " " + i;
 		ntd.setAttributeNode(attr);
 		attr = document.createAttribute("nowrap");
@@ -26,14 +28,14 @@ function addNewLoop(name) {
 		rowlist[i].append(ntd);
 	}
 
-	let newS = generate("td", "loop");
-	let nowrap = document.createAttribute("nowrap");
+	const newS = generate("td", "loop");
+	const nowrap = document.createAttribute("nowrap");
 	newS.setAttributeNode(nowrap);
 
-	let newtf;
-	let attr;
+	const newtf;
+	const attr;
 
-	let btn = document.createElement("input");
+	const btn = document.createElement("input");
 	attr = document.createAttribute("type");
 	attr.value = "button";
 	btn.setAttributeNode(attr);
@@ -41,7 +43,7 @@ function addNewLoop(name) {
 	attr.value = "Add wave";
 	btn.setAttributeNode(attr);
 	btn.addEventListener("click", function () {
-		let i = btn.parentElement.getAttribute("id");
+		const i = btn.parentElement.getAttribute("id");
 		track.loops[i.substring(i.length - 1, i.length) * 1].waves.push(new Wave());
 		buildHtml();
 	});
@@ -52,10 +54,10 @@ function addNewLoop(name) {
 	attr.value = "button";
 	btn.setAttributeNode(attr);
 	attr = document.createAttribute("value");
-	attr.value = "Delete";
+	attr.value = "Deconste";
 	btn.setAttributeNode(attr);
 	btn.addEventListener("click", function () {
-		deleteLoop(btn.parentElement.getAttribute("id").substring(4, 5) * 1);
+		deconsteLoop(btn.parentElement.getAttribute("id").substring(4, 5) * 1);
 	});
 	newS.appendChild(btn);
 
@@ -78,12 +80,12 @@ function addNewLoop(name) {
 }
 //int: internal element
 function addWave(refID, o, int) {
-	let row;
+	const row;
 	if (track.loops[refID].waves.length >= maxWaveStack) {
 		row = generate("tr", "row");
-		for (let x = 0; x < track.loops.length; x++) {
-			let ntd = document.createElement("td");
-			let attr = document.createAttribute("id");
+		for (const x = 0; x < track.loops.length; x++) {
+			const ntd = document.createElement("td");
+			const attr = document.createAttribute("id");
 			attr.value = x + " " + rowlist.length;
 			ntd.setAttributeNode(attr);
 			attr = document.createAttribute("nowrap");
@@ -96,10 +98,10 @@ function addWave(refID, o, int) {
 	} else {
 		row = document.getElementById("row" + track.loops[refID].waves.length);
 	}
-	let nW = document.createElement("span");
+	const nW = document.createElement("span");
 
-	let add = document.createElement("input");
-	let a = document.createAttribute("type");
+	const add = document.createElement("input");
+	const a = document.createAttribute("type");
 	a.value = "text";
 	add.setAttributeNode(a);
 	a = document.createAttribute("size");
@@ -178,10 +180,10 @@ function addWave(refID, o, int) {
 	a.value = "button";
 	add.setAttributeNode(a);
 	a = document.createAttribute("value");
-	a.value = "Delete";
+	a.value = "Deconste";
 	add.setAttributeNode(a);
 	add.addEventListener("click", function () {
-		deleteWave(nW);
+		deconsteWave(nW);
 	});
 	nW.append(add);
 
@@ -190,14 +192,14 @@ function addWave(refID, o, int) {
 	a.value = refID + "b" + o;
 	nW.setAttributeNode(a);
 }
-function deleteWave(element) {
-	let targetArray =
+function deconsteWave(element) {
+	const targetArray =
 		track.loops[
 			element
 				.getAttribute("id")
 				.substring(0, element.getAttribute("id").indexOf("b")) * 1
 		].waves;
-	let toRemove =
+	const toRemove =
 		targetArray[
 		element
 			.getAttribute("id")
@@ -206,8 +208,8 @@ function deleteWave(element) {
 				element.getAttribute("id").length
 			) * 1
 		];
-	let copy = [];
-	for (let i = 0; i < targetArray.length; i++) {
+	const copy = [];
+	for (const i = 0; i < targetArray.length; i++) {
 		if (targetArray[i] != toRemove) {
 			copy.push(targetArray[i]);
 		}
@@ -220,9 +222,9 @@ function deleteWave(element) {
 	].waves = copy;
 	buildHtml();
 }
-function deleteLoop(index) {
-	let copy = [];
-	for (let i = 0; i < track.loops.length; i++) {
+function deconsteLoop(index) {
+	const copy = [];
+	for (const i = 0; i < track.loops.length; i++) {
 		if (i != index) {
 			copy.push(track.loops[i]);
 		}
@@ -237,21 +239,21 @@ function buildHtml() {
 	maxWaveStack = 0;
 	ids = { loop: 0, row: 0 };
 	document.getElementById("looplistRows").remove();
-	let a = document.createElement("tbody");
-	att = document.createAttribute("id");
+	const a = document.createElement("tbody");
+	const att = document.createAttribute("id");
 	att.value = "looplistRows";
 	a.setAttributeNode(att);
-	let add = document.createElement("tr");
+	const add = document.createElement("tr");
 	att = document.createAttribute("id");
 	att.value = "looplist";
 	add.setAttributeNode(att);
 	a.append(add);
 	document.getElementById("tab").append(a);
-	for (let i = 0; i < track.loops.length; i++) {
+	for (const i = 0; i < track.loops.length; i++) {
 		addNewLoop(track.loops[i].name);
 	}
-	for (let i = 0; i < track.loops.length; i++) {
-		for (let j = 0; j < track.loops[i].waves.length; j++) {
+	for (const i = 0; i < track.loops.length; i++) {
+		for (const j = 0; j < track.loops[i].waves.length; j++) {
 			addWave(i, j, track.loops[i].waves[j]);
 		}
 	}
@@ -262,17 +264,17 @@ function evaluateHtml() {
 		track.m = document.getElementById("loopDuration").value;
 		track.loopLen =
 			(document.getElementById("sampleRate").value * track.m) / 1000;
-		for (let x = 0; x < track.loops.length; x++) {
+		for (const x = 0; x < track.loops.length; x++) {
 			track.loops[x].name = document.getElementById("loop" + x).lastChild.value;
-			for (let y = 0; y < track.loops[x].waves.length; y++) {
-				let children = document.getElementById(x + "b" + y).children;
-				let customs = [];
-				for (let el of children) {
+			for (const y = 0; y < track.loops[x].waves.length; y++) {
+				const children = document.getElementById(x + "b" + y).children;
+				const customs = [];
+				for (const el of children) {
 					if (el.getAttribute("type") == "text") {
 						customs.push(el);
 					}
 				}
-				let h = track.loops[x].waves[y];
+				const h = track.loops[x].waves[y];
 				h.type = customs[0].value;
 				h.fx = customs[1].value;
 				h.vol = customs[2].value;
@@ -284,8 +286,8 @@ function evaluateHtml() {
 		document.getElementById("output").value = track.parse();
 	} catch (e) { }
 }
-let templateAtt;
-var templates = {};
+const templateAtt;
+const templates = {};
 templates.loopTemplate = generate("span", "loop");
 //prepare event listener
 document.getElementById("loopAdder").addEventListener("click", function () {
