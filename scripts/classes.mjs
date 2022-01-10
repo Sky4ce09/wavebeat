@@ -1,9 +1,10 @@
 class Track {
 	//pass the amount of milliseconds for a loop to play, the desired sample rate and an array of loops
-	constructor(loopLengthMillis = 500, sampleRate = 8000, loopList = []) {
+	constructor(loopLengthMillis = 500, sampleRate = 8000, loopList = [], reversed = false) {
 		this.m = loopLengthMillis;
 		this.loopLen = (loopLengthMillis * sampleRate) / 1000;
 		this.loops = loopList;
+		this.rev = reversed;
 
 		Object.seal(this);
 	}
@@ -11,7 +12,12 @@ class Track {
 		const indiciesString = document.getElementById("loopIndex").value;
 		let indiciesLen;
 
-		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n[\n`;
+		let out = `a=${this.loopLen},\nb=${this.m / this.loopLen},\n`;
+		if (this.rev) {
+			out += `t=a*100000-abs(t),\n`
+		}
+		
+		out += `[\n`;
 		if (indiciesString === "") {
 			out += `\t// NOTE: no loop indices!\n`;
 			indiciesLen = 0;
@@ -51,7 +57,7 @@ class Loop {
 	}
 }
 class Wave {
-	//pass a type (string), the volume, the frequency and the hold (a special parameter)
+	//pass a type (string), an effect array, the volume, the frequency and the hold (a special parameter)
 	constructor(
 		form = "square",
 		effect = "note",

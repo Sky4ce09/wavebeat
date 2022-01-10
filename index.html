@@ -19,9 +19,11 @@
 			<input id="sampleRate" type="text" value="8000" size="2" oninput="evaluateHtml()">
 			<label for="sampleRate" style="color: white">Hz</label>
 			<input id="loopDuration" type="text" value="500" size="2" oninput="evaluateHtml()">
-			<lavel for="loopDuration" style="color: white">ms (loop duration in milliseconds)</lavel>
+			<label for="loopDuration" style="color: white">ms (loop duration in milliseconds)</label>
 			<input id="loopIndex" type="text" value="" size="14" oninput="evaluateHtml()">
-			<label for="loopIndex" style="color: white">loop indices (as in 0,1,0,0,1 for myLoop0, myLoop1, myLoop0, myLoop0, myLoop1)</label>
+			<label for="loopIndex" style="color: white">loop indices (as in 0,1,1 for myLoop0, myLoop1, myLoop1)</label>
+			<input id="reverser" type="text" value="0" size="2" oninput="evaluateHtml()">
+			<label for="reverser" style="color: white">generate reverse timeline?</label>
 		</div>
 		<div id="loop-frame" style="overflow-x: scroll">
 			<table id="tab">

@@ -72,9 +72,6 @@ function addWave(refID, o, int) {
 		looplistRows.append(row);
 		maxWaveStack++;
 	}
-	// else { // TODO: this never gets used?
-	//const row = document.getElementById(`row${track.loops[refID].waves.length}`);
-	//}
 	const nW = document.createElement("span");
 
 	for (const value of [
@@ -114,6 +111,7 @@ function deleteWave(element) {
 }
 //i am desperate. this function should be unnecessary.
 //it does make short work of gaps between waves tho
+//called every time a structural change happens to the loop table
 function buildHtml() {
 	rowlist = []; // TODO: is initializing these globals neccecary?
 	maxWaveStack = 0;
@@ -137,6 +135,8 @@ function buildHtml() {
 function evaluateHtml() {
 	track.m = document.getElementById("loopDuration").value;
 	track.loopLen = (document.getElementById("sampleRate").value * track.m) / 1000;
+	let revVal = document.getElementById("reverser").value;
+	track.reversed = revVal == "true" || revVal == "1" || revVal == "yes";
 	for (const x in track.loops) {
 		track.loops[x].name = document.getElementById(`loop${x}`).lastChild.value;
 		for (const y in track.loops[x].waves) {
