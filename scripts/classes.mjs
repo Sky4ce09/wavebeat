@@ -1,8 +1,8 @@
 class Track {
 	//pass the amount of milliseconds for a loop to play, the desired sample rate and an array of loops
 	constructor(loopLengthMillis = 500, sampleRate = 8000, loopList = [], reversed = false) {
-		this.m = loopLengthMillis;
 		this.loopLen = (loopLengthMillis * sampleRate) / 1000;
+		this.m = Math.log(this.loopLen);
 		this.loops = loopList;
 		this.rev = reversed;
 
@@ -108,14 +108,18 @@ class Wave {
 						out += `*((t*${alen}%a)/a)`;
 						break;
 					case "rise":
-						out += `*(1-pow(1-(t*${alen}%a)/a,b))`;
+						out += `*(1-pow(1-(t*${alen}%a)/a,pow(log(a),2)/b/b*${alen}))`;
 						break;
 					case "fall":
-						out += `*(1-pow((t*${alen}%a)/a,b))`;
+						out += `*(pow(((a-t%a)*${alen}%a)/a,pow(log(a),2)/b/b*${alen}))`;
 						break;
-					case "rand":
+					case "bigrand":
 						out += `*random()`;
 						break;
+					case "rand":
+						out += `*(random()/2+0.5)`
+					case "smallrand":
+						out += `*(random()/4+0.75)`
 				}
 		return out ?? 0;
 	}
