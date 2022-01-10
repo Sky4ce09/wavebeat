@@ -16,7 +16,7 @@ class Track {
 			out += `\t// NOTE: no loop indices!\n`;
 			indiciesLen = 0;
 		} else {
-			const indicies = indiciesString.split(",");
+			const indicies = indiciesString.split(/ |,/g);
 			indiciesLen = indicies.length;
 			for (const index of indicies) {
 				const indexNum = parseInt(index);
@@ -87,23 +87,24 @@ class Wave {
 				break;
 		}
 		if (out !== null)
-			switch (this.fx) {
-				case "note":
-					out += `*(1-(t*${alen}%a)/a)`;
-					break;
-				case "cresc":
-					out += `*((t*${alen}%a)/a)`;
-					break;
-				case "rise":
-					out += `*(1-pow(1-(t*${alen}%a)/a,b))`;
-					break;
-				case "fall":
-					out += `*(1-pow((t*${alen}%a)/a,b))`;
-					break;
-				case "rand":
-					out += `*random()`;
-					break;
-			}
+			for (const effect of this.fx.split(/ |,/g))
+				switch (effect) {
+					case "note":
+						out += `*(1-(t*${alen}%a)/a)`;
+						break;
+					case "cresc":
+						out += `*((t*${alen}%a)/a)`;
+						break;
+					case "rise":
+						out += `*(1-pow(1-(t*${alen}%a)/a,b))`;
+						break;
+					case "fall":
+						out += `*(1-pow((t*${alen}%a)/a,b))`;
+						break;
+					case "rand":
+						out += `*random()`;
+						break;
+				}
 		return out ?? 0;
 	}
 }
