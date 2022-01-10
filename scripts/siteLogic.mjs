@@ -136,7 +136,7 @@ function evaluateHtml() {
 	track.m = document.getElementById("loopDuration").value;
 	track.loopLen = (document.getElementById("sampleRate").value * track.m) / 1000;
 	let revVal = document.getElementById("reverser").value;
-	track.reversed = revVal == "true" || revVal == "1" || revVal == "yes";
+	track.rev = revVal == "true" || revVal == "1" || revVal == "yes";
 	for (const x in track.loops) {
 		track.loops[x].name = document.getElementById(`loop${x}`).lastChild.value;
 		for (const y in track.loops[x].waves) {
