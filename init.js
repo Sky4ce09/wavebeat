@@ -109,25 +109,42 @@ class Wave {
         out = "0";
         break;
     }
+    let effectlist = fxgetter(this.fx);
     if (out != "0") {
-      switch (this.fx) {
-        case "note":
-          out += "*(1-(t*" + alen + "%a)/a)";
-          break;
-        case "cresc":
-          out += "*((t*" + alen + "%a)/a)";
-          break;
-        case "rise":
-          out += "*(1-pow(1-(t*" + alen + "%a)/a,b))";
-          break;
-        case "fall":
-          out += "*(1-pow((t*" + alen + "%a)/a,b))";
-          break;
-        case "rand":
-          out += "*random()";
-          break;
+      for (let i = 0; i < effectlist.length; i++) {
+        switch (effectlist[i]) {
+          case "note":
+            out += "*(1-(t*" + alen + "%a)/a)";
+            break;
+          case "cresc":
+            out += "*((t*" + alen + "%a)/a)";
+            break;
+          case "rise":
+            out += "*(1-pow(1-(t*" + alen + "%a)/a,b))";
+            break;
+          case "fall":
+            out += "*(1-pow((t*" + alen + "%a)/a,b))";
+            break;
+          case "rand":
+            out += "*random()";
+            break;
+        }
       }
     }
     return out;
   }
+}
+function fxgetter(string) {
+  let out = [];
+  for (let i = 0; i <= string.length; i++){
+    if (i == string.length) {
+      out.push(string.substring(0, i));
+      break;
+    } else if (string[i] == "," || string[i] == " ") {
+      out.push(string.substring(0, i));
+      string = string.substring(i + 1, string.length);
+      i = 0;
+    }
+  }
+  return out;
 }
