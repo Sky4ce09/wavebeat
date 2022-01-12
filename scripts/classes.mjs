@@ -77,6 +77,7 @@ class Wave {
 		let out = null;
 		switch (this.type) {
 			case "sine":
+				// TODO: make sine compatible with effects
 				out = `(sin(t*${Math.log10(1.5 + this.frq / 16)})*${this.vol / 2})+${this.vol / 2}`;
 				break;
 			case "square":
@@ -86,16 +87,16 @@ class Wave {
 				out = `(t*${(this.frq * this.vol) / 255}%${this.vol})`;
 				break;
 			case "laser":
-				out = `(${39.6 * this.frq * this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
+				out = `(${39.6*this.frq*this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
 				break;
 			case "revlaser":
-				out = `(${39.6 * this.frq * this.vol}/((a-t%a)*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
+				out = `(${39.6*this.frq*this.vol}/((a-t%a)*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
 				break;
 			case "halflaser":
-				out = `(${39.6 * this.frq * this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t%a<a/2)`;
+				out = `(${39.6*this.frq*this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t*${alen}%a<a/2)`;
 				break;
 			case "revhalflaser":
-				out = `(${39.6 * this.frq * this.vol}/((a-t%a)*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t%a<a/2)`;
+				out = `(${39.6*this.frq*this.vol}/((a-t%a)*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t*${alen}%a<a/2)`;
 				break;
 		}
 		if (out !== null)
