@@ -87,10 +87,10 @@ class Wave {
 				out = `(t*${(this.frq * this.vol) / 255}%${this.vol})`;
 				break;
 			case "laser":
-				out = `(${39.6*this.frq*this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
+				out = `(${39.6*this.frq*this.vol}/(t%(a/${alen})/${this.hol})%${this.vol})`;
 				break;
 			case "revlaser":
-				out = `(${39.6*this.frq*this.vol}/((a-t%a)*${alen}%(a/${alen})/${this.hol})%${this.vol})`;
+				out = `(${39.6*this.frq*this.vol}/((a-t%a)%(a/${alen})/${this.hol})%${this.vol})`;
 				break;
 			case "halflaser":
 				out = `(${39.6*this.frq*this.vol}/(t*${alen}%(a/${alen})/${this.hol})%${this.vol})*(t*${alen}%a<a/2)`;
